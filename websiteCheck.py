@@ -18,3 +18,7 @@ to_email = "to@email.com"
    You may tweak this to your liking, but I don't want to use the actual email password.
    You can use environment variables if you'd like to. '''
 KEY = "apppassword"
+
+# URL of the website to keep watch over. This code will send emails
+# during ANY change on the website page.
+url = "https://www.test.com"
