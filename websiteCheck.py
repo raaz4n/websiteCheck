@@ -5,7 +5,6 @@
 
 import smtplib, ssl, json, boto3, requests, hashlib
 
-
 s3 = boto3.client("s3", region_name="us-east-2")
 def lambda_handler(event, context):
     bucket = "hash-data-save"
@@ -13,6 +12,21 @@ def lambda_handler(event, context):
     return {
         'statusCode': 200,
     }
+
+# This function will get the hash of the URL. It will crash if the page isn't found.
+def web_hash(url):
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        raw_web_data = response.content
+        h = hashlib.sha256()
+        h.update(raw_web_data)
+        hashHex = h.hexdigest()
+        return hashHex
+    except requests.exceptions.HTTPError:
+        print("Error. Page not found.")
+        return None
+    
 
 # This is the email that will be used to send emails with.
 # You should probably use a throwaway email, as sensitive information will be accessed.
@@ -28,4 +42,3 @@ KEY = "apppassword"
 
 # This is the URL the user would like to check.
 URL = "https://test.com"
-
