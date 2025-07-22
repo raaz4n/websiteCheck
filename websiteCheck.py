@@ -3,7 +3,7 @@
 ''' smtplib will transmit delivery to a specified email. json and boto3 will be used in lambda_handler for AWS integration.
     requests and BeautifulSoup will get information from a URL and trip once a change occurs within the website. '''
 
-import smtplib, json, boto3
+import smtplib, json, boto3, requests
 from bs4 import BeautifulSoup
 
 s3 = boto3.client("s3", region_name="us-east-2")
