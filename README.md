@@ -1,0 +1,1 @@
+websiteCheck is a Python script that will email a user once a website has been updated/changed. It can be tied with AWS, Google Cloud, or used by hardware such as Raspberry Pi. It can be used for very specific use cases; as you could imagine, it doesn't scrape websites entirely. This is a personal project for myself to check a website I've been looking over frequently.
