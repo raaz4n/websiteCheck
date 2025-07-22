@@ -1,10 +1,10 @@
 # websiteCheck.py
 # developed by raaz4n@github
-''' smtplib will transmit delivery to a specified email. json and boto3 will be used in lambda_handler for AWS integration.
-    requests and BeautifulSoup will get information from a URL and trip once a change occurs within the website. '''
+''' smtplib and ssl will transmit delivery to a specified email. json and boto3 will be used in lambda_handler for AWS integration.
+    requests and hashlib will get information from a URL and trip once a change occurs within the website. '''
 
-import smtplib, json, boto3, requests
-from bs4 import BeautifulSoup
+import smtplib, ssl, json, boto3, requests, hashlib
+
 
 s3 = boto3.client("s3", region_name="us-east-2")
 def lambda_handler(event, context):
@@ -25,3 +25,7 @@ to_email = "to@email.com"
    You may tweak this to your liking, but I don't want to use the actual email password.
    You can use environment variables if you'd like to. '''
 KEY = "apppassword"
+
+# This is the URL the user would like to check.
+URL = "https://test.com"
+
