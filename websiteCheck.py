@@ -1,11 +1,18 @@
 # websiteCheck.py
 # developed by raaz4n@github
-''' smtplib will transmit delivery to a specified email.
-    requests and BeautifulSoup will get information from
-    a URL and trip once a change occurs within the website.'''
+''' smtplib will transmit delivery to a specified email. json and boto3 will be used in lambda_handler for AWS integration.
+    requests and BeautifulSoup will get information from a URL and trip once a change occurs within the website. '''
 
-import smtplib, requests
+import smtplib, json, boto3
 from bs4 import BeautifulSoup
+
+s3 = boto3.client("s3", region_name="us-east-2")
+def lambda_handler(event, context):
+    bucket = "hash-data-save"
+    key = "test"
+    return {
+        'statusCode': 200,
+    }
 
 # This is the email that will be used to send emails with.
 # You should probably use a throwaway email, as sensitive information will be accessed.
