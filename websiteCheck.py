@@ -1,9 +1,10 @@
 # websiteCheck.py
 # developed by raaz4n@github
 ''' smtplib and ssl will transmit delivery to a specified email. json and boto3 will be used in lambda_handler for AWS integration.
-    requests and hashlib will get information from a URL and trip once a change occurs within the website. '''
+    requests, hashlib, and BeautifulSoup will get information from a URL and trip once a change occurs within the website. '''
 
 import smtplib, ssl, json, boto3, requests, hashlib
+from bs4 import BeautifulSoup
 
 s3 = boto3.client("s3", region_name="us-east-2")
 def lambda_handler(event, context):
@@ -13,14 +14,16 @@ def lambda_handler(event, context):
         'statusCode': 200,
     }
 
-# This function will get the hash of the URL. It will crash if the page isn't found.
+# This function will get the hash of the URL through JavaScript.
+# If the function fails to reach the website, it will throw an exception.
 def web_hash(url):
     try:
         response = requests.get(url)
         response.raise_for_status()
-        raw_web_data = response.content
-        h = hashlib.sha256()
-        h.update(raw_web_data)
+        soup = BeautifulSoup(response.content, "html.parser")
+        txt = soup.text
+        encodedTxt = txt.encode()
+        h = hashlib.sha256(encodedTxt)
         hashHex = h.hexdigest()
         return hashHex
     except requests.exceptions.HTTPError:
@@ -41,4 +44,7 @@ to_email = "to@email.com"
 KEY = "apppassword"
 
 # This is the URL the user would like to check.
-URL = "https://test.com"
+URL = "https://example.com"
+
+has = web_hash(URL)
+print(has)
