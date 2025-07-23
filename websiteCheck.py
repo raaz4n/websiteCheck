@@ -3,7 +3,7 @@
 ''' smtplib and ssl will transmit delivery to a specified email. json and boto3 will be used in lambda_handler for AWS integration.
     requests, hashlib, and BeautifulSoup will get information from a URL and trip once a change occurs within the website. '''
 
-import smtplib, ssl, json, boto3, requests, hashlib, selenium
+import smtplib, ssl, json, boto3, requests, hashlib
 from bs4 import BeautifulSoup
 
 s3 = boto3.client("s3", region_name="us-east-2")
@@ -18,7 +18,6 @@ def lambda_handler(event, context):
 # If the function fails to reach the website, it will throw an exception.
 def web_hash(url):
     try:
-        # selenium code
         response = requests.get(url)
         response.raise_for_status()
         soup = BeautifulSoup(response.content, "html.parser")
