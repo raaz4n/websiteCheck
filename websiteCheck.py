@@ -8,6 +8,7 @@
     requests, hashlib, and BeautifulSoup will get information from a URL and trip once a change occurs within the website. '''
 
 import smtplib, ssl, json, boto3, requests, hashlib
+from email.message import EmailMessage
 from bs4 import BeautifulSoup
 
 s3 = boto3.client("s3", region_name="us-east-2")
@@ -42,7 +43,7 @@ def send_mail(fromMail, toMail, KEY, PORT, smtpMail, msg):
     serv = smtplib.SMTP(smtpMail, PORT)
     serv.starttls()
     serv.login(fromMail, KEY)
-    serv.sendmail(fromMail, toMail, msg)
+    serv.send_message(msg)
     serv.quit()
 
 # This is the email that will be used to send emails with.
@@ -63,4 +64,11 @@ URL = "https://example.com"
 # I will be using a gmail email, with the port being 587.
 PORT = 587
 smtpMail = "smtp.gmail.com"
-msg = f"{URL} has been updated!"
+message = f"{URL} has been updated!"
+
+# Set up for the email subject & body.
+msg = EmailMessage()
+msg["Subject"] = "Website update"
+msg["From"] = from_email
+msg["To"] = to_email
+msg.set_content(message)
