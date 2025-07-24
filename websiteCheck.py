@@ -7,17 +7,30 @@
 ''' smtplib and ssl will transmit delivery to a specified email. json and boto3 will be used in lambda_handler for AWS integration.
     requests, hashlib, and BeautifulSoup will get information from a URL and trip once a change occurs within the website. '''
 
-import smtplib, ssl, json, boto3, requests, hashlib
+import smtplib, ssl, json, boto3, requests, hashlib, os
 from email.message import EmailMessage
 from bs4 import BeautifulSoup
 
-s3 = boto3.client("s3", region_name="us-east-2")
 def lambda_handler(event, context):
     bucket = "hash-data-save"
     key = "test"
-    return {
-        'statusCode': 200,
-    }
+    newHash = web_hash(URL)
+
+    s3 = boto3.client("s3", region_name="us-east-2")
+    readS3 = s3.get_object(Key=key, Bucket=bucket)
+    oldHash = readS3["Body"].read().decode("UTF-8")
+    
+    if oldHash != newHash:
+        # Set up for the email subject & body.
+            msg = EmailMessage()
+            msg["Subject"] = "Website update"
+            msg["From"] = from_email
+            msg["To"] = to_email
+            msg.set_content(message)
+
+            send_mail(from_email, to_email, KEY, PORT, smtpMail, msg)
+            s3.put_object(Bucket=bucket, Key=key, Body=(json.dumps(newHash).encode("UTF-8")))
+
 
 ''' This function will get the raw HTML from the URL, and then hash it using SHA-256.
     It uses requests to get the content from the page, and then BeautifulSoup to get
@@ -38,7 +51,7 @@ def web_hash(url):
         print("Error. Page not found.")
         return None
     
-
+# This function will send mail to the user.
 def send_mail(fromMail, toMail, KEY, PORT, smtpMail, msg):
     serv = smtplib.SMTP(smtpMail, PORT)
     serv.starttls()
@@ -48,27 +61,19 @@ def send_mail(fromMail, toMail, KEY, PORT, smtpMail, msg):
 
 # This is the email that will be used to send emails with.
 # You should probably use a throwaway email, as sensitive information will be accessed.
-from_email = "from@email.com"
+from_email = os.environ["FROM_EMAIL"]
 
 # This is the email that will receive the message that the website has been updated.
-to_email = "to@email.com"
+to_email = os.environ["TO_EMAIL"]
 
-'''For my own usage, I will be using a throwaway gmail account that uses an app password.
-   You may tweak this to your liking, but I don't want to use the actual email password.
-   You can use environment variables if you'd like to. '''
-KEY = "apppassword"
+# I will be using an environment variable to store the email key.
+# This is the app password that will be used to authenticate the email.
+KEY = os.environ["EMAILKEY"]
 
 # This is the URL the user would like to check.
-URL = "https://example.com"
+URL = os.environ["URL"]
 
 # I will be using a gmail email, with the port being 587.
 PORT = 587
 smtpMail = "smtp.gmail.com"
 message = f"{URL} has been updated!"
-
-# Set up for the email subject & body.
-msg = EmailMessage()
-msg["Subject"] = "Website update"
-msg["From"] = from_email
-msg["To"] = to_email
-msg.set_content(message)
