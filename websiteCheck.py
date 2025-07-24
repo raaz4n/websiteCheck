@@ -19,11 +19,11 @@ def lambda_handler(event, context):
         'statusCode': 200,
     }
 
-''' This function will get information from the URL using BeautifulSoup.
-    If the element can be located through "View Page Source" when right-clicking a page,
-    this function will work properly. If it can't be located there, requests + BeautifulSoup will not be enough.
-    A library known as Selenium must be used because of JavaScript.
-    If the function fails to reach the website, it will throw an exception. '''
+''' This function will get the raw HTML from the URL, and then hash it using SHA-256.
+    It uses requests to get the content from the page, and then BeautifulSoup to get
+    the text content. If the content is loaded with JS, the function won't work.
+    In this case, using a library like Selenium or Playwright would be more appropriate. 
+    If the page isn't found, it will return None and print an error message. '''
 def web_hash(url):
     try:
         response = requests.get(url)
