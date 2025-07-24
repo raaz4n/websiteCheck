@@ -1,5 +1,9 @@
 # websiteCheck.py
 # developed by raaz4n@github
+# Description: This Python script will email te user once a website has been updated.
+# This depends on how much of the website is written in JS, and if BeautifulSoup and requests
+# can pick up the change.
+
 ''' smtplib and ssl will transmit delivery to a specified email. json and boto3 will be used in lambda_handler for AWS integration.
     requests, hashlib, and BeautifulSoup will get information from a URL and trip once a change occurs within the website. '''
 
@@ -34,6 +38,8 @@ def web_hash(url):
         return None
     
 
+def send_mail(fromMail, toMail, KEY, URL, PORT, smtpMail, msg):
+
 # This is the email that will be used to send emails with.
 # You should probably use a throwaway email, as sensitive information will be accessed.
 from_email = "from@email.com"
@@ -48,3 +54,8 @@ KEY = "apppassword"
 
 # This is the URL the user would like to check.
 URL = "https://example.com"
+
+# I will be using a gmail email, with the port being 587.
+PORT = 587
+smtpMail = "smtp.gmail.com"
+msg = f"{URL} has been updated!"
