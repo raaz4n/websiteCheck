@@ -20,8 +20,8 @@ def lambda_handler(event, context):
 
 ''' This function will get information from the URL using BeautifulSoup.
     If the element can be located through "View Page Source" when right-clicking a page,
-    this function will work properly. If it can't be located there, requests + BeautifulSoup will not be enough,
-    as a library known as Selenium must be used because of JavaScript.
+    this function will work properly. If it can't be located there, requests + BeautifulSoup will not be enough.
+    A library known as Selenium must be used because of JavaScript.
     If the function fails to reach the website, it will throw an exception. '''
 def web_hash(url):
     try:
