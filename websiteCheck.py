@@ -38,7 +38,12 @@ def web_hash(url):
         return None
     
 
-def send_mail(fromMail, toMail, KEY, URL, PORT, smtpMail, msg):
+def send_mail(fromMail, toMail, KEY, PORT, smtpMail, msg):
+    serv = smtplib.SMTP(smtpMail, PORT)
+    serv.starttls()
+    serv.login(fromMail, KEY)
+    serv.sendmail(fromMail, toMail, msg)
+    serv.quit()
 
 # This is the email that will be used to send emails with.
 # You should probably use a throwaway email, as sensitive information will be accessed.
