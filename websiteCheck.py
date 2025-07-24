@@ -11,6 +11,10 @@ import smtplib, ssl, json, boto3, requests, hashlib, os
 from email.message import EmailMessage
 from bs4 import BeautifulSoup
 
+# This is the lambda handler that will be called when the AWS Lambda function is invoked.
+# It will check the website for any updates and send an email if something has changed.
+# It does this by comparing the current hash with the previous hash stored in an S3 bucket.
+# For my own use, I schedule this to run every hour with AWS Lambda.
 def lambda_handler(event, context):
     bucket = "hash-data-save"
     key = "test"
