@@ -34,7 +34,10 @@ def lambda_handler(event, context):
 
             send_mail(from_email, to_email, KEY, PORT, smtpMail, msg)
             s3.put_object(Bucket=bucket, Key=key, Body=(json.dumps(newHash).encode("UTF-8")))
-
+    return{
+        "statusCode": 200,
+        "body": json.dumps("Website check completed successfully.")
+    }
 
 ''' This function will get the raw HTML from the URL, and then hash it using SHA-256.
     It uses requests to get the content from the page, and then BeautifulSoup to get
