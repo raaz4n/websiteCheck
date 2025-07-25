@@ -16,8 +16,8 @@ from bs4 import BeautifulSoup
 # It does this by comparing the current hash with the previous hash stored in an S3 bucket.
 # For my own use, I schedule this to run every hour with AWS Lambda.
 def lambda_handler(event, context):
-    bucket = "hash-data-save"
-    key = "test"
+    bucket = "your_s3_bucket_here"                            
+    key = "your_file_name_here"
     newHash = web_hash(URL)
 
     s3 = boto3.client("s3", region_name="us-east-2")
