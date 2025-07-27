@@ -6,7 +6,8 @@
 
 ''' smtplib and ssl will transmit delivery to a specified email. json and boto3 will be used in lambda_handler for AWS integration.
     requests, hashlib, and BeautifulSoup will get information from a URL and trip once a change occurs within the website. 
-    os will be used for environment variables to protect user information.'''
+    os will be used for environment variables to protect user information. EmailMessage will be used to construct the email message
+    to the user.'''
 
 import smtplib, ssl, json, boto3, requests, hashlib, os
 from email.message import EmailMessage
