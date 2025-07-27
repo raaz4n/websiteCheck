@@ -16,14 +16,14 @@ from bs4 import BeautifulSoup
 # It does this by comparing the current hash with the previous hash stored in an S3 bucket.
 # For my own use, I schedule this to run every hour with AWS Lambda.
 def lambda_handler(event, context):
-    bucket = "your_s3_bucket_here"                            
-    key = "your_file_name_here"
+    bucket = "hash-data-save"
+    key = "test"
     newHash = web_hash(URL)
 
     s3 = boto3.client("s3", region_name="us-east-2")
     readS3 = s3.get_object(Key=key, Bucket=bucket)
     oldHash = readS3["Body"].read().decode("UTF-8")
-    
+
     if oldHash != newHash:
         # Set up for the email subject & body.
             msg = EmailMessage()
@@ -33,7 +33,7 @@ def lambda_handler(event, context):
             msg.set_content(message)
 
             send_mail(from_email, to_email, KEY, PORT, smtpMail, msg)
-            s3.put_object(Bucket=bucket, Key=key, Body=(json.dumps(newHash).encode("UTF-8")))
+            s3.put_object(Bucket=bucket, Key=key, Body=(newHash).encode("UTF-8"))
     return{
         "statusCode": 200,
         "body": json.dumps("Website check completed successfully.")
